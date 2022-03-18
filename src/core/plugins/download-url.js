@@ -19,7 +19,8 @@ export default function downloadUrlPlugin (toolbox) {
         responseInterceptor: config.responseInterceptor || (a => a),
         credentials: "same-origin",
         headers: {
-          "Accept": "application/json,*/*"
+          "Accept": "application/json,*/*",
+          "x-swagger-spec-lang": specSelectors.lang() || config.lang
         }
       }).then(next,next)
 

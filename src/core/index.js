@@ -24,6 +24,8 @@ export default function SwaggerUI(opts) {
     dom_id: null, // eslint-disable-line camelcase
     domNode: null,
     spec: {},
+    lang: "en_US",
+    langs: null,
     url: "",
     urls: null,
     layout: "BaseLayout",

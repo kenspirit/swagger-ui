@@ -23,6 +23,11 @@ export const url = createSelector(
   spec => spec.get("url")
 )
 
+export const lang = createSelector(
+  state,
+  spec => spec.get("lang")
+)
+
 export const specStr = createSelector(
   state,
   spec => spec.get("spec") || ""

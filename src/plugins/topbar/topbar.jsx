@@ -14,16 +14,17 @@ export default class Topbar extends React.Component {
 
   constructor(props, context) {
     super(props, context)
-    this.state = { url: props.specSelectors.url(), selectedIndex: 0 }
+    this.state = { url: props.specSelectors.url(), lang: props.specSelectors.lang(), selectedIndex: 0, selectedLangIndex: 0 }
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    this.setState({ url: nextProps.specSelectors.url() })
+    this.setState({ url: nextProps.specSelectors.url(), lang: nextProps.specSelectors.lang() })
   }
 
   onUrlChange =(e)=> {
     let {target: {value}} = e
-    this.setState({url: value})
+
+    this.setState({ url: value })
   }
 
   flushAuthData() {
@@ -37,21 +38,31 @@ export default class Topbar extends React.Component {
     })
   }
 
-  loadSpec = (url) => {
+  loadSpec = (url, lang) => {
     this.flushAuthData()
     this.props.specActions.updateUrl(url)
+    if (lang) {
+      this.props.specActions.updateLang(lang)
+    }
     this.props.specActions.download(url)
   }
 
   onUrlSelect =(e)=> {
     let url = e.target.value || e.target.href
-    this.loadSpec(url)
+    this.loadSpec(url, this.state.lang)
     this.setSelectedUrl(url)
     e.preventDefault()
   }
 
+  onLangSelect = (e) => {
+    let lang = e.target.value || e.target.href
+    this.setSelectedLang(lang)
+    this.loadSpec(this.state.url, lang)
+    e.preventDefault()
+  }
+
   downloadUrl = (e) => {
-    this.loadSpec(this.state.url)
+    this.loadSpec(this.state.url, this.state.lang)
     e.preventDefault()
   }
 
@@ -82,9 +93,27 @@ export default class Topbar extends React.Component {
     }
   }
 
+  setSelectedLang = (selectedLang) => {
+    const configs = this.props.getConfigs()
+    const langs = configs.langs || []
+
+    if (langs && langs.length && selectedLang) {
+      langs.forEach((lang, i) => {
+        if (lang.code === selectedLang) {
+          this.setState({ selectedLangIndex: i })
+        }
+      })
+    }
+  }
+
   componentDidMount() {
     const configs = this.props.getConfigs()
     const urls = configs.urls || []
+    const langs = configs.langs || []
+
+    if (langs && langs.length) {
+      this.setSelectedLang(configs.lang)
+    }
 
     if(urls && urls.length) {
       var targetIndex = this.state.selectedIndex
@@ -100,7 +129,7 @@ export default class Topbar extends React.Component {
         })
       }
 
-      this.loadSpec(urls[targetIndex].url)
+      this.loadSpec(urls[targetIndex].url, configs.lang)
     }
   }
 
@@ -121,10 +150,24 @@ export default class Topbar extends React.Component {
     if (isFailed) classNames.push("failed")
     if (isLoading) classNames.push("loading")
 
-    const { urls } = getConfigs()
+    const { urls, langs } = getConfigs()
     let control = []
     let formOnSubmit = null
 
+    if (langs) {
+      let rows = []
+      langs.forEach((lang, i) => {
+        rows.push(<option key={i} value={lang.code}>{lang.name}</option>)
+      })
+
+      control.push(
+        <label className="select-label" htmlFor="select"><span>Select a language</span>
+          <select id="select" disabled={isLoading} onChange={this.onLangSelect} value={langs[this.state.selectedLangIndex].code}>
+            {rows}
+          </select>
+        </label>
+      )
+    }
     if(urls) {
       let rows = []
       urls.forEach((link, i) => {

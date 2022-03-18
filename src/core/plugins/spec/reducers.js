@@ -12,6 +12,7 @@ import {
 import {
   UPDATE_SPEC,
   UPDATE_URL,
+  UPDATE_LANG,
   UPDATE_JSON,
   UPDATE_PARAM,
   UPDATE_EMPTY_PARAM_INCLUSION,
@@ -39,6 +40,10 @@ export default {
 
   [UPDATE_URL]: (state, action) => {
     return state.set("url", action.payload+"")
+  },
+
+  [UPDATE_LANG]: (state, action) => {
+    return state.set("lang", action.payload + "")
   },
 
   [UPDATE_JSON]: (state, action) => {
