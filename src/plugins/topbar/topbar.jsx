@@ -104,6 +104,9 @@ export default class Topbar extends React.Component {
         }
       })
     }
+    if (configs.persistLang) {
+      localStorage.setItem("swagger-ui-lang", selectedLang)
+    }
   }
 
   componentDidMount() {
@@ -111,8 +114,16 @@ export default class Topbar extends React.Component {
     const urls = configs.urls || []
     const langs = configs.langs || []
 
+    let lang
+    if (configs.persistLang) {
+      lang = localStorage.getItem("swagger-ui-lang")
+    }
+    if (!lang) {
+      lang = configs.lang
+    }
+
     if (langs && langs.length) {
-      this.setSelectedLang(configs.lang)
+      this.setSelectedLang(lang)
     }
 
     if(urls && urls.length) {
@@ -129,7 +140,7 @@ export default class Topbar extends React.Component {
         })
       }
 
-      this.loadSpec(urls[targetIndex].url, configs.lang)
+      this.loadSpec(urls[targetIndex].url, lang)
     }
   }
 
