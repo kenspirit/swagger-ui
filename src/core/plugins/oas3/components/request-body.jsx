@@ -205,7 +205,7 @@ const RequestBody = ({
               </td>
               <td className="parameters-col_description">
                 <Markdown source={ description }></Markdown>
-                {isExecute ? <div>
+                { isExecute || contentType.indexOf("multipart/") === 0 ? <div>
                   <JsonSchemaForm
                     fn={fn}
                     dispatchInitialValue={!isFile}
