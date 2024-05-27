@@ -51,6 +51,8 @@ const defaultOptions = Object.freeze({
       },
     },
     defaultExpanded: true,
+    lang: "en_US",
+    langs: null,
     languages: null, // e.g. only show curl bash = ["curl_bash"]
   },
   supportedSubmitMethods: [

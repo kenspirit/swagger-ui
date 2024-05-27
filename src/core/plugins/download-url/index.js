@@ -25,6 +25,7 @@ export default function downloadUrlPlugin(toolbox) {
           credentials: "same-origin",
           headers: {
             Accept: "application/json,*/*",
+            "x-swagger-spec-lang": specSelectors.lang() || config.lang
           },
         }).then(next, next)
 

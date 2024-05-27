@@ -14,6 +14,7 @@ import { paramToValue, isEmptyValue } from "core/utils"
 
 export const UPDATE_SPEC = "spec_update_spec"
 export const UPDATE_URL = "spec_update_url"
+export const UPDATE_LANG = "spec_update_lang"
 export const UPDATE_JSON = "spec_update_json"
 export const UPDATE_PARAM = "spec_update_param"
 export const UPDATE_EMPTY_PARAM_INCLUSION = "spec_update_empty_param_inclusion"
@@ -51,6 +52,10 @@ export function updateResolved(spec) {
 
 export function updateUrl(url) {
   return {type: UPDATE_URL, payload: url}
+}
+
+export function updateLang(lang) {
+  return {type: UPDATE_LANG, payload: lang}
 }
 
 export function updateJsonSpec(json) {
