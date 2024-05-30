@@ -82,6 +82,14 @@ const RequestBody = ({
   const requestBodyContent = requestBody?.get("content") ?? new OrderedMap()
   contentType = contentType || requestBodyContent.keySeq().first() || ""
 
+  let multiPartEnabled = false
+  if (contentType.indexOf("multipart/") === 0) {
+    multiPartEnabled = true
+  }
+  if (!isExecute) {
+    multiPartEnabled = false
+  }
+  
   const mediaTypeValue = requestBodyContent.get(contentType) ?? OrderedMap()
   const schemaForMediaType = mediaTypeValue.get("schema", OrderedMap())
   const rawExamplesOfMediaType = mediaTypeValue.get("examples", null)
@@ -134,7 +142,7 @@ const RequestBody = ({
     isObjectContent &&
     (
       contentType === "application/x-www-form-urlencoded" ||
-      contentType.indexOf("multipart/") === 0
+      multiPartEnabled
     ) &&
     schemaForMediaType.get("properties", OrderedMap()).size > 0
   ) {
@@ -205,7 +213,7 @@ const RequestBody = ({
               </td>
               <td className="parameters-col_description">
                 <Markdown source={ description }></Markdown>
-                { isExecute || contentType.indexOf("multipart/") === 0 ? <div>
+                { isExecute ? <div>
                   <JsonSchemaForm
                     fn={fn}
                     dispatchInitialValue={!isFile}
