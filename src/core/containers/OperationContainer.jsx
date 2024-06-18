@@ -113,7 +113,13 @@ export default class OperationContainer extends PureComponent {
     layoutActions.show(["operations", tag, operationId], !isShown)
   }
 
-  onCancelClick=() => {
+  onCancelClick = (pathMethod) => {
+    const contentType = this.props.oas3Selectors.requestContentType(this.props.path, this.props.method)
+    if (contentType.indexOf("multipart/form-data") > -1) {
+      const defaultRequestBodyValue = this.props.oas3Selectors.selectDefaultRequestBodyValue(...pathMethod)
+      this.props.oas3Actions.setRequestBodyValue({ value: defaultRequestBodyValue, pathMethod })
+    }
+
     this.setState({tryItOutEnabled: !this.state.tryItOutEnabled})
   }
 

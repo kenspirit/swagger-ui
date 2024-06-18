@@ -97,6 +97,7 @@ export default class Parameters extends Component {
     let {
       onTryoutClick,
       onResetClick,
+      onCancelClick,
       parameters,
       allowTryItOut,
       tryItOutEnabled,
@@ -164,7 +165,7 @@ export default class Parameters extends Component {
               isOAS3={specSelectors.isOAS3()}
               hasUserEditedBody={oas3Selectors.hasUserEditedBody(...pathMethod)}
               enabled={tryItOutEnabled}
-              onCancelClick={this.props.onCancelClick}
+              onCancelClick={() => onCancelClick(pathMethod)}
               onTryoutClick={onTryoutClick}
               onResetClick={() => onResetClick(pathMethod)}/>
           ) : null}
